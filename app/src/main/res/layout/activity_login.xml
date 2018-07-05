@@ -65,12 +65,11 @@
     <TextView
         android:id="@+id/messageOne"
         android:layout_width="wrap_content"
-        android:layout_height="17dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="76dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="52dp"
         android:layout_marginTop="36dp"
         android:text="Dont have an Account?"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
@@ -83,7 +82,9 @@
         android:layout_marginTop="36dp"
         android:text="Register here"
         android:textColor="#0d6ec3"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/messageOne"
         app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
