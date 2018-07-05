@@ -1,7 +1,9 @@
-package com.example.kliq.eventattendancemobile;
+package com.example.kliq.eventattendancemobile.register;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.kliq.eventattendancemobile.R;
 
 public class Register extends AppCompatActivity {
 
