@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,11 +22,10 @@ import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
 import com.example.kliq.eventattendancemobile.login.LoginActivity;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -39,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText lName;
     private EditText eMail;
     private EditText password;
+    private TextView loginHere;
 
     private Button registerButton;
 
@@ -52,6 +53,15 @@ public class RegisterActivity extends AppCompatActivity {
         eMail = (EditText) findViewById(R.id.emailAddress);
         password = (EditText) findViewById(R.id.password);
         registerButton = (Button) findViewById(R.id.registerButton);
+        loginHere = (TextView) findViewById(R.id.messageTwo);
+
+        loginHere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,15 +82,15 @@ public class RegisterActivity extends AppCompatActivity {
         final String email = eMail.getText().toString().trim();
         final String pass = password.getText().toString().trim();
 
-        JSONObject registerUserRequstBody = new JSONObject();
-        registerUserRequstBody.put(kEY_FNAME,firstName);
-        registerUserRequstBody.put(kEY_LNAME,lastName);
-        registerUserRequstBody.put(kEY_EMAIL,email);
-        registerUserRequstBody.put(kEY_PASS,pass);
+        JSONObject registerUserRequestBody = new JSONObject();
+        registerUserRequestBody.put(kEY_FNAME,firstName);
+        registerUserRequestBody.put(kEY_LNAME,lastName);
+        registerUserRequestBody.put(kEY_EMAIL,email);
+        registerUserRequestBody.put(kEY_PASS,pass);
 
 
 
-        JsonObjectRequest registerUserRequst = new JsonObjectRequest(Request.Method.POST, REGISTER_URL, registerUserRequstBody, new Response.Listener<JSONObject>() {
+        JsonObjectRequest registerUserRequest = new JsonObjectRequest(Request.Method.POST, REGISTER_URL, registerUserRequestBody, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 
@@ -95,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
-        queue.add(registerUserRequst);
+        queue.add(registerUserRequest);
 
 
     }
