@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#666666"
+
     tools:context="com.example.kliq.eventattendancemobile.register.RegisterActivity">
 
     <EditText
@@ -57,6 +58,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:ems="10"
+        android:inputType="text"
         android:hint="Password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,12 +66,14 @@
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="111dp"
-        android:layout_height="wrap_content"
+        android:layout_width="221dp"
+        android:layout_height="58dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="36dp"
+        android:backgroundTint="#e6a5a5"
         android:text="Register"
+        android:textColor="#141212"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,6 +86,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="40dp"
+        android:backgroundTint="#b76b6b"
         android:text="Registration"
         android:textColor="#d92b27"
         android:textSize="30sp"
@@ -109,7 +114,7 @@
         android:id="@+id/messageTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="68dp"
+        android:layout_marginEnd="52dp"
         android:layout_marginTop="20dp"
         android:text="Login here"
         android:textColor="#0c67b2"
