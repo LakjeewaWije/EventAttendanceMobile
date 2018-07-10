@@ -1,7 +1,6 @@
 package com.example.kliq.eventattendancemobile;
 
 import android.app.ProgressDialog;
-import android.net.sip.SipSession;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
