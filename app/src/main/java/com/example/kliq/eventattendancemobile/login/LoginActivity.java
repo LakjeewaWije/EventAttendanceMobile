@@ -1,6 +1,7 @@
 package com.example.kliq.eventattendancemobile.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
+import com.example.kliq.eventattendancemobile.data.User;
 import com.example.kliq.eventattendancemobile.register.RegisterActivity;
 
 import org.json.JSONException;
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView registerHere;
 
     private Button loginButton;
+    User loggedInUser=null;
 
 
 
@@ -85,6 +88,28 @@ public class LoginActivity extends AppCompatActivity {
 
                 Log.v("Sucessfull",response.toString());
 
+                try {
+                    loggedInUser = new User(
+                            response.getInt("userId"),
+                            response.getString("fName"),
+                            response.getString("lName"),
+                            response.getString("eMail"),
+                            response.getString("password"),
+                            response.getString("authToken")
+                    );
+
+                    SharedPreferences.Editor editor = getSharedPreferences("myprefs",MODE_PRIVATE).edit();
+                    editor.putInt("userID",loggedInUser.getUserId());
+                    editor.putString("AuthToken",loggedInUser.getAuthToken());
+                    editor.putString("firstName",loggedInUser.getfName());
+                    editor.apply();
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -95,6 +120,9 @@ public class LoginActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
         queue.add(registerUserRequest);
+
+
+
 
 
 
