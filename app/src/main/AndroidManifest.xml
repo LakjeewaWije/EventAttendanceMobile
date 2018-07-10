@@ -2,12 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kliq.eventattendancemobile">
 
-<<<<<<< HEAD
-    <uses-permission android:name="android.permission.INTERNET"/>
-=======
     <!-- adding internet permission -->
     <uses-permission android:name="android.permission.INTERNET" />
->>>>>>> feature/mobile-api-homescreen
+
 
     <application
 

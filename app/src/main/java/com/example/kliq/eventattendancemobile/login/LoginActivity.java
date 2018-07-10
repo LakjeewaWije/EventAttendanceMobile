@@ -1,7 +1,7 @@
 package com.example.kliq.eventattendancemobile.login;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,27 +20,26 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
-import com.example.kliq.eventattendancemobile.data.User;
+import com.example.kliq.eventattendancemobile.RequestHandler;
+import com.example.kliq.eventattendancemobile.SharedPrefManager;
 import com.example.kliq.eventattendancemobile.register.RegisterActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
     private static final String LOGIN_URL = "http://192.168.8.101:9000/user/login";
-    public static final String kEY_EMAIL = "email";
-    public static final String kEY_PASS = "password";
 
     private EditText email;
     private EditText password;
     private TextView registerHere;
-
+    private ProgressDialog progressDialog;
     private Button loginButton;
-    User loggedInUser=null;
 
 
 
@@ -52,6 +52,11 @@ public class LoginActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
         loginButton = (Button) findViewById(R.id.loginButton);
         registerHere = (TextView) findViewById(R.id.messageTwo);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading events..");
+
+
 
         registerHere.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     loginUser();
                 } catch (JSONException e) {
-                    Log.v("loginButton.onClick",e.getLocalizedMessage());
+                    Log.v("loginButton.onClick", e.getLocalizedMessage());
                     e.printStackTrace();
                 }
             }
@@ -75,57 +80,66 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() throws JSONException {
+        final String emailAddress = email.getText().toString().trim();
+        final String pass = password.getText().toString().trim();
 
-        JSONObject registerUserRequestBody = new JSONObject();
-        registerUserRequestBody.put(kEY_EMAIL,email.getText().toString());
-        registerUserRequestBody.put(kEY_PASS,password.getText().toString());
-
-
-
-        JsonObjectRequest registerUserRequest = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, registerUserRequestBody, new Response.Listener<JSONObject>() {
+        progressDialog.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
-
-                Log.v("Sucessfull",response.toString());
+            public void onResponse(String response) {
 
                 try {
-                    loggedInUser = new User(
-                            response.getInt("userId"),
-                            response.getString("fName"),
-                            response.getString("lName"),
-                            response.getString("eMail"),
-                            response.getString("password"),
-                            response.getString("authToken")
-                    );
+                    JSONObject obj = new JSONObject(response);
+                    if(!obj.getBoolean("error")) {
+                        SharedPrefManager.getmInstance(getApplicationContext()).userLogin(
+                                obj.getString("firstName"),
+                                obj.getString("authToken"));
 
-                    SharedPreferences.Editor editor = getSharedPreferences("myprefs",MODE_PRIVATE).edit();
-                    editor.putInt("userID",loggedInUser.getUserId());
-                    editor.putString("AuthToken",loggedInUser.getAuthToken());
-                    editor.putString("firstName",loggedInUser.getfName());
-                    editor.apply();
+                        Toast.makeText(
+                                getApplicationContext(),
+                                "Login Successful" ,
+                                Toast.LENGTH_LONG
+                        ).show();
 
+                    }else {
+                        Toast.makeText(
+                                getApplicationContext(),
+                                obj.getString("message") ,
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-
             }
-        }, new Response.ErrorListener() {
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+
+                        Toast.makeText(
+                                getApplicationContext(),
+                                error.getMessage() ,
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                }){
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.v("onErrorResponse",error.getLocalizedMessage());
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put(emailAddress, emailAddress);
+                params.put(pass, pass);
+                return params;
             }
-        });
-
-        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-        queue.add(registerUserRequest);
-
-
-
-
+        };
+        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
 
 
     }
-
 }
+
+
