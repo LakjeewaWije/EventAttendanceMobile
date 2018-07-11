@@ -13,7 +13,7 @@ public class SharedPrefManager {
     private static Context mctx;
 
     private static final String SHARED_PREF_NAME = "sharedPref";
-    private static final String KEY_FNAME = "firstName";
+    private static final String KEY_FNAME = "fName";
     private static final String KEY_AUTH_TOKEN = "authToken";
 
 
@@ -34,9 +34,10 @@ public class SharedPrefManager {
         SharedPreferences sharedPreferences = mctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putString(KEY_FNAME, fName);
-        editor.putString(KEY_AUTH_TOKEN, authToken);
+        editor.putString(KEY_FNAME, "aaaa");
+        editor.putString(KEY_AUTH_TOKEN, "bbbb");
         editor.apply();
+        
 
         return true;
     }
