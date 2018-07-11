@@ -64,6 +64,7 @@ public class Scan extends AppCompatActivity {
 
             @Override
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+               cameraSource.stop();
 
             }
         });
@@ -77,9 +78,12 @@ public class Scan extends AppCompatActivity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size()>0){
-                    Intent intent = new Intent();
+                    Intent intent1 = getIntent();
+                    Intent intent = new Intent(Scan.this, ResultScreen.class);
                     intent.putExtra("barcode",barcodes.valueAt(0));
-                    setResult(RESULT_OK,intent);
+                    intent.putExtra("eventId",intent1.getStringExtra("eventIds"));
+                    intent.putExtra("eventName",intent1.getStringExtra("eventNames"));
+                    startActivity(intent);
                     finish();
                 }
             }

@@ -3,6 +3,7 @@
     package="com.example.kliq.eventattendancemobile">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.kliq.qr.Scan"></activity>
+        <activity android:name="com.example.kliq.qr.Scan" />
+        <activity android:name="com.example.kliq.qr.ResultScreen"></activity>
     </application>
 
 </manifest>
