@@ -16,15 +16,15 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name="com.example.kliq.qr.MainScreen">
+        <activity android:name=".qr.MainScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.kliq.qr.Scan" />
-        <activity android:name="com.example.kliq.qr.ResultScreen"></activity>
+        <activity android:name=".qr.Scan" />
+        <activity android:name=".qr.ResultScreen"></activity>
     </application>
 
 </manifest>

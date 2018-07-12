@@ -1,4 +1,4 @@
-package com.example.kliq.qr;
+package com.example.kliq.eventattendancemobile.qr;
 
 import android.Manifest;
 import android.content.Intent;

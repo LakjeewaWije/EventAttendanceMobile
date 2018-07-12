@@ -1,4 +1,4 @@
-package com.example.kliq.qr;
+package com.example.kliq.eventattendancemobile.qr;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -32,7 +32,7 @@ public class ResultScreen extends AppCompatActivity {
     public String eventNamei=""; //event name to save eventname taken from previos intent
     public String eventIdi=""; //event id to save eventid taken from previos intent
     public static JSONObject jsonObject=null;
-    public static final String URL_DATA = "http://192.168.8.100:9000/ed";
+    public static final String URL_DATA = "http://192.168.8.104:9000/ed";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,4 +1,4 @@
-package com.example.kliq.qr;
+package com.example.kliq.eventattendancemobile.qr;
 
 class EventItem {
     private String head;

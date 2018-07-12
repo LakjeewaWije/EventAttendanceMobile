@@ -1,4 +1,4 @@
-package com.example.kliq.qr;
+package com.example.kliq.eventattendancemobile.qr;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -10,8 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
@@ -42,7 +39,7 @@ public class MainScreen extends AppCompatActivity {
     private List<EventItem> eventItems;
     private RecyclerView.Adapter adapter;
     private RecyclerView recyclerView;
-    public static final String URL_DATA = "http://192.168.8.100:9000/con";
+    public static final String URL_DATA = "http://192.168.8.104:9000/con";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
