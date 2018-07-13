@@ -50,7 +50,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         EventItem eventItem = eventItems.get(position);
         holder.textViewHead.setText(eventItem.getHead());
-        holder.textViewDesc.setText(eventItem.getDesc());
+//        holder.textViewDesc.setText(eventItem.getDesc());
         holder.bind(eventItems.get(position), listener);
 
     }

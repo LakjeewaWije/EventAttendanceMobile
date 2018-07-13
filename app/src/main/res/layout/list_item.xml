@@ -16,16 +16,22 @@
 
             <TextView
                 android:id="@+id/textViewHead"
-                android:text="Heading"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="46dp"
+                android:background="#c53226"
+                android:paddingTop="5dp"
+                android:text="Heading"
+                android:fontFamily="sans-serif-medium"
+                android:paddingLeft="15dp"
+                android:textStyle="normal|bold"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="#ffffff" />
 
             <TextView
                 android:id="@+id/textViewDesc"
-                android:text="Description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="9dp"
+                android:text="" />
 
 
 

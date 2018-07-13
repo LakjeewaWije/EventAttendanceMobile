@@ -3,12 +3,14 @@ package com.example.kliq.eventattendancemobile.qr;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Icon;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.kliq.eventattendancemobile.R;
@@ -24,14 +26,19 @@ public class Scan extends AppCompatActivity {
     BarcodeDetector barcode;
     CameraSource cameraSource;
     SurfaceHolder holder;
-
+    ImageView borderimg;
+    Icon icon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+        borderimg = (ImageView) findViewById(R.id.borderimg) ;
+        // mapping the XML attributes with Class attributes
         cameraView = (SurfaceView) findViewById(R.id.cameraView);
         cameraView.setZOrderMediaOverlay(true);
-        holder = cameraView.getHolder();
+
+        holder = cameraView.getHolder(); //initalisng the camera view to the holder
+
         barcode = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE)
                 .build();

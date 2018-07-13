@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kliq.eventattendancemobile">
 
+    <!-- adding internet permission -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,16 +14,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
-            android:name="com.google.android.gms.vision.DEPENDENCIES"
-            android:value="barcode" />
+        android:name="com.google.android.gms.vision.DEPENDENCIES"
+        android:value="barcode" />
 
+        <activity android:name=".login.LoginActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
         <activity android:name=".qr.MainScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+    </activity>
+        <activity android:name=".register.RegisterActivity"></activity>
         <activity android:name=".qr.Scan" />
         <activity android:name=".qr.ResultScreen"></activity>
     </application>
