@@ -3,6 +3,7 @@ package com.example.kliq.eventattendancemobile.login;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
 import com.example.kliq.eventattendancemobile.qr.MainScreen;
 import com.example.kliq.eventattendancemobile.register.RegisterActivity;
+import com.facebook.stetho.Stetho;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     public static LoggedInUser user;
 
     //Declaring  Shared Preferences
-
+    private String authTok;
     SharedPreferences menaPref;
     SharedPreferences.Editor editor;
     private static final String SHARED_PREF_NAME = "sharedPref";
@@ -52,10 +55,15 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+    static boolean doubleBackToExitPressedOnce = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Stetho.initializeWithDefaults(this);
 
         // mapping XML elements with class attributes
         email = (EditText) findViewById(R.id.emailAddress);
@@ -80,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                         loginUser();
+                    Log.v("gggggggggggg",authTok);
                 } catch (Exception e) {
                     Log.v("loginButton.onClick", e.getLocalizedMessage());
                     e.printStackTrace();
@@ -89,7 +98,34 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialising the Shred Preferences
         menaPref = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        editor = menaPref.edit();
+        String auth = menaPref.getString(KEY_AUTH_TOKEN,"");
+
+
+        if(!auth.isEmpty()){
+            Intent intent = new Intent(LoginActivity.this, MainScreen.class);
+            startActivity(intent);
+            finish();
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
     private void loginUser() throws JSONException {
@@ -131,9 +167,12 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString(KEY_FNAME, user.getfName());
                         editor.putString(KEY_AUTH_TOKEN, authToken);
                         editor.apply();
+
                         Intent intent = new Intent(LoginActivity.this, MainScreen.class);
                         startActivity(intent);
                         finish();
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -143,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
 //                    Log.v("onErrorResponse", error.getLocalizedMessage());
-                    recreate();
+              //      recreate();
 
                 }
             });

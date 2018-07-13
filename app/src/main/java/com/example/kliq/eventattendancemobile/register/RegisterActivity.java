@@ -2,6 +2,7 @@ package com.example.kliq.eventattendancemobile.register;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView loginHere;
     //XML Button
     private Button registerButton;
+    static boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,27 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
+
     /**
      * Register User JSON Request
      * @throws JSONException
@@ -117,6 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Log.v("onresponse",response.toString());
                         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                         startActivity(intent);
+                        finish();
                         onPause();
 
                     }

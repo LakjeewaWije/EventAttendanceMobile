@@ -2,9 +2,11 @@ package com.example.kliq.eventattendancemobile.qr;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -67,7 +69,7 @@ public class MainScreen extends AppCompatActivity {
     //Declare a private  RequestQueue variable
     private  RequestQueue requestQueue;
     private static MainScreen mInstance;
-
+    static boolean doubleBackToExitPressedOnce = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +102,27 @@ public class MainScreen extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
+
 
     public static synchronized MainScreen getInstance()
     {
@@ -153,9 +176,16 @@ instance is used throughout the application
             case R.id.logout:
                 Toast.makeText(this,"Logged Out",Toast.LENGTH_SHORT).show();
                 logout();
-                editor = menaPref.edit();
+
+               // menaPref = getApplicationContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+               // menaPref.edit().remove("authToken").commit();
+
+                SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit();
                 editor.clear();
-                editor.apply();
+                editor.commit();
+
+
+
                 Intent intent = new Intent(MainScreen.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -209,7 +239,6 @@ instance is used throughout the application
                                     Intent intent = new Intent(MainScreen.this, Scan.class); // creating an intent to the Scan Page
                                     intent.putExtra("eventIds",item.getId()); // passing the eventId to next Intent
                                     startActivity(intent); //start the Intent
-                                    finish();
                                 }
                             });
                             recyclerView.setAdapter(adapter); //set the Adapter to the Recycler View
@@ -238,7 +267,7 @@ instance is used throughout the application
     /**
      * Logout method to Remove the current User
      */
-    private void logout(){
+    private void logout() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loggin Out...");
         progressDialog.show();
@@ -248,7 +277,41 @@ instance is used throughout the application
                 new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
+                    }
+                })
+
+        {
+
+            /**
+             * Passing some request headers*
+             */
+            @Override
+            public Map getHeaders() throws AuthFailureError {
+                HashMap headers = new HashMap();
+                headers.put("X-AUTH-TOKEN", authTok);
+                return headers;
+            }
+        };
+    }
+
+
+
+    private void authVal(){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.DELETE,
+                URL_LOGOUT, null,
+                new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
                     }
                 },
                 new Response.ErrorListener() {
@@ -268,7 +331,6 @@ instance is used throughout the application
                 return headers;
             }
         };
-
 // Adding the request to the queue along with a unique string tag
         MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
     }
