@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -27,12 +28,17 @@ import com.facebook.stetho.Stetho;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String LOGIN_URL = "http://192.168.8.103:9000/user/login"; // URL for user Login route
+    private static final String LOGIN_URL = "http://192.168.8.104:9000/user/login"; // URL for user Login route
     public static final String kEY_EMAIL = "email";
     public static final String kEY_PASS = "password";
+    private static final String CHECKLOG_URL = "http://192.168.8.104:9000/user/check";
+
 
     // XML attributes
     private EditText email;
@@ -87,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                        loginUser();
+                    loginUser();
                     Log.v("gggggggggggg",authTok);
                 } catch (Exception e) {
                     Log.v("loginButton.onClick", e.getLocalizedMessage());
@@ -98,8 +104,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialising the Shred Preferences
         menaPref = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String auth = menaPref.getString(KEY_AUTH_TOKEN,"");
-
+         String auth = menaPref.getString(KEY_AUTH_TOKEN,"");
 
         if(!auth.isEmpty()){
             Intent intent = new Intent(LoginActivity.this, MainScreen.class);
@@ -181,16 +186,11 @@ public class LoginActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    Log.v("onErrorResponse", error.getLocalizedMessage());
-              //      recreate();
-
+                    Log.v("onErrorResponse", error.getLocalizedMessage());
+                    Toast.makeText(LoginActivity.this, "UnAuthorized", Toast.LENGTH_SHORT).show();
                 }
             });
-
-            // Request Que
             RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
             queue.add(registerUserRequest);
-
-
     }
 }

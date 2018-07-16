@@ -52,7 +52,7 @@ public class ResultScreen extends AppCompatActivity {
     private static final String KEY_AUTH_TOKEN = "authToken";
     //----------------------------------------------------------------------
     public static JSONObject jsonObject=null;
-    public static final String URL_DATA = "http://192.168.8.103:9000/ed";
+    public static final String URL_DATA = "http://192.168.8.104:9000/ed";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

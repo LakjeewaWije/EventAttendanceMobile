@@ -29,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
 import com.example.kliq.eventattendancemobile.login.LoginActivity;
+import com.example.kliq.eventattendancemobile.register.RegisterActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +57,7 @@ public class MainScreen extends AppCompatActivity {
 
 
 
-    public static final String URL_DATA = "http://192.168.8.103:9000/con"; // URL for loading events route
+    public static final String URL_DATA = "http://192.168.8.104:9000/mob"; // URL for loading events route
     private  String URL_LOGOUT=""; // URL for log out User route
     // Declaring Shared Preferences
     private static final String SHARED_PREF_NAME = "sharedPref";
@@ -92,7 +93,7 @@ public class MainScreen extends AppCompatActivity {
         getSupportActionBar().setTitle("Welcome "+name); // setting the retrived name on the Acitivity Bar
         authTok = menaPref.getString(KEY_AUTH_TOKEN,""); //retireving the Auth Token to logout the current user when needed
 
-        URL_LOGOUT ="http://192.168.8.103:9000/user/log"; // Intialisng the Loggin OUt URL with the current users Auth Token
+        URL_LOGOUT ="http://192.168.8.104:9000/user/log"; // Intialisng the Loggin OUt URL with the current users Auth Token
 
 
         mInstance=MainScreen.this;
@@ -254,11 +255,25 @@ instance is used throughout the application
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
 
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainScreen.this, "UNAUTHORIZED", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainScreen.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
 
                     }
-                });
-
+                })
+            {
+                /**
+                 * Passing some request headers*
+                 */
+                @Override
+                public Map getHeaders() throws AuthFailureError {
+                HashMap headers = new HashMap();
+                headers.put("X-AUTH-TOKEN", authTok);
+                return headers;
+            }
+            };
         //Initialising the request Que
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
@@ -270,7 +285,7 @@ instance is used throughout the application
     private void logout() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loggin Out...");
-        progressDialog.show();
+      //  progressDialog.show();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.DELETE,
                 URL_LOGOUT, null,
@@ -298,32 +313,37 @@ instance is used throughout the application
                 return headers;
             }
         };
+        MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
     }
 
 
 
-    private void authVal(){
+    /*private void authVal(){
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.DELETE,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
                 URL_LOGOUT, null,
                 new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Intent intent = new Intent(MainScreen.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
 
                     }
                 })
 
         {
 
-            /** Passing some request headers* */
+            /*//** Passing some request headers* *//**//*
             @Override
             public Map getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
@@ -333,5 +353,5 @@ instance is used throughout the application
         };
 // Adding the request to the queue along with a unique string tag
         MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
-    }
+    }*/
 }
