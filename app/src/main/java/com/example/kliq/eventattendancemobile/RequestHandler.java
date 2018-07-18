@@ -10,7 +10,8 @@ import com.android.volley.toolbox.Volley;
  * Created by ajmal on 7/10/18.
  */
 
-public class RequestHandler {
+//public class RequestHandler {
+/*
         private static RequestHandler mInstance;
         private RequestQueue mRequestQueue;
         private static Context mCtx;
@@ -41,6 +42,7 @@ public class RequestHandler {
             getRequestQueue().add(req);
         }
 
+*/
 
-    }
+  //  }
 

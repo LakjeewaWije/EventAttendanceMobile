@@ -1,12 +1,10 @@
-package com.example.kliq.eventattendancemobile.login;
+package com.example.kliq.eventattendancemobile.data.service;
 
-/*
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -22,20 +19,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
-import com.example.kliq.eventattendancemobile.qr.MainScreen;
-import com.example.kliq.eventattendancemobile.register.RegisterActivity;
+import com.example.kliq.eventattendancemobile.data.model.User;
+import com.example.kliq.eventattendancemobile.data.service.MainScreen;
+import com.example.kliq.eventattendancemobile.data.service.RegisterActivity;
 import com.facebook.stetho.Stetho;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-*/
+public class LoginActivity extends AppCompatActivity {
 
-
-//public class LoginActivity extends AppCompatActivity {
-/*
     private static final String LOGIN_URL = "http://192.168.8.104:9000/user/login"; // URL for user Login route
     public static final String kEY_EMAIL = "email";
     public static final String kEY_PASS = "password";
@@ -49,7 +42,7 @@ import java.util.Map;
     private Button loginButton;
 
     // Reference for LoggedInUser class Object
-    public static LoggedInUser user;
+    public static User user;
 
     //Declaring  Shared Preferences
     private String authTok;
@@ -84,7 +77,7 @@ import java.util.Map;
         registerHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -106,10 +99,10 @@ import java.util.Map;
 
         // Initialising the Shred Preferences
         menaPref = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
-         String auth = menaPref.getString(KEY_AUTH_TOKEN,"");
+        String auth = menaPref.getString(KEY_AUTH_TOKEN,"");
 
         if(!auth.isEmpty()){
-            Intent intent = new Intent(LoginActivity.this, MainScreen.class);
+            Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.LoginActivity.this, MainScreen.class);
             startActivity(intent);
             finish();
         }
@@ -147,52 +140,52 @@ import java.util.Map;
 
         // the request for login
 
-            JsonObjectRequest registerUserRequest = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, registerUserRequestBody, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
+        JsonObjectRequest registerUserRequest = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, registerUserRequestBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
 
-                    Log.v("Successful", response.toString());
-                    try {
+                Log.v("Successful", response.toString());
+                try {
 
-                        // get the response to a JSON object
-                        JSONObject obj = response.getJSONObject("data");
+                    // get the response to a JSON object
+                    JSONObject obj = response.getJSONObject("data");
 
-                        // referencing the obj JSON object to a new JSON object
-                        JSONObject o = obj.getJSONObject("user");
+                    // referencing the obj JSON object to a new JSON object
+                    JSONObject o = obj.getJSONObject("user");
 
-                        //Retrieving the o JSON object data to few variables
+                    //Retrieving the o JSON object data to few variables
 
-                        int userId = o.getInt("userId"); // current User ID
-                        String fName = o.getString("fName"); // current User First Name
-                        String lName = o.getString("lName"); // current User last Name
-                        String authToken = o.getString("authToken"); // current User Auth Token
+                    int userId = o.getInt("userId"); // current User ID
+                    String fName = o.getString("fName"); // current User First Name
+                    String lName = o.getString("lName"); // current User last Name
+                    String authToken = o.getString("authToken"); // current User Auth Token
 
-                        user = new LoggedInUser(userId, fName, lName, authToken); // current user initialised
+                    user = new User(userId, fName, lName, authToken); // current user initialised
 
-                        // saving values in shared preferences
-                        editor = menaPref.edit();
-                        editor.putString(KEY_FNAME, user.getfName());
-                        editor.putString(KEY_AUTH_TOKEN, authToken);
-                        editor.apply();
+                    // saving values in shared preferences
+                    editor = menaPref.edit();
+                    editor.putString(KEY_FNAME, user.getfName());
+                    editor.putString(KEY_AUTH_TOKEN, authToken);
+                    editor.apply();
 
-                        Intent intent = new Intent(LoginActivity.this, MainScreen.class);
-                        startActivity(intent);
-                        finish();
+                    Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.LoginActivity.this, MainScreen.class);
+                    startActivity(intent);
+                    finish();
 
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.v("onErrorResponse", error.getLocalizedMessage());
-                    Toast.makeText(LoginActivity.this, "UnAuthorized", Toast.LENGTH_SHORT).show();
-                }
-            });
-            RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-            queue.add(registerUserRequest);
-    }*/
-//}
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("onErrorResponse", error.getLocalizedMessage());
+                Toast.makeText(com.example.kliq.eventattendancemobile.data.service.LoginActivity.this, "UnAuthorized", Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue queue = Volley.newRequestQueue(com.example.kliq.eventattendancemobile.data.service.LoginActivity.this);
+        queue.add(registerUserRequest);
+    }
+}

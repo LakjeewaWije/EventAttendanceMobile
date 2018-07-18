@@ -1,15 +1,11 @@
-package com.example.kliq.eventattendancemobile;
+package com.example.kliq.eventattendancemobile.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by ajmal on 7/10/18.
- */
+public class SharedPrefManager {
 
-//public class SharedPrefManager {
-/*
-    private static SharedPrefManager mInstance;
+    private static com.example.kliq.eventattendancemobile.util.SharedPrefManager mInstance;
     private static Context mctx;
 
     private static final String SHARED_PREF_NAME = "sharedPref";
@@ -22,9 +18,9 @@ import android.content.SharedPreferences;
         this.mctx = mCtx;
     }
 
-    public static synchronized SharedPrefManager getmInstance(Context context) {
+    public static synchronized com.example.kliq.eventattendancemobile.util.SharedPrefManager getmInstance(Context context) {
         if(mInstance == null) {
-            mInstance = new SharedPrefManager(context);
+            mInstance = new com.example.kliq.eventattendancemobile.util.SharedPrefManager(context);
         }
         return mInstance;
     }
@@ -58,5 +54,5 @@ import android.content.SharedPreferences;
         editor.apply();
         return true;
 
-    }*/
-//}
+    }
+}

@@ -1,11 +1,12 @@
-package com.example.kliq.eventattendancemobile.qr;
+package com.example.kliq.eventattendancemobile.data.model;
 
-//class EventItem {
-   /* private String head;
+public class Event {
+
+    private String head;
     private String desc;
     private String id;
 
-    public EventItem(String head, String desc, String id) {
+    public Event(String head, String desc, String id) {
         this.head = head;
         this.desc = desc;
         this.id = id;
@@ -21,5 +22,5 @@ package com.example.kliq.eventattendancemobile.qr;
 
     public String getId() {
         return id;
-    }*/
-//}
+    }
+}

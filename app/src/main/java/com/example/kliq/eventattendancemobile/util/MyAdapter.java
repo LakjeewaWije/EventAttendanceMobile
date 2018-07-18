@@ -1,4 +1,4 @@
-package com.example.kliq.eventattendancemobile.qr;
+package com.example.kliq.eventattendancemobile.util;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,46 +9,43 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kliq.eventattendancemobile.R;
+import com.example.kliq.eventattendancemobile.data.model.Event;
 
 import java.util.List;
 
-/**
- * Created by ajmal on 7/10/18.
- */
+public class MyAdapter extends RecyclerView.Adapter<com.example.kliq.eventattendancemobile.util.MyAdapter.ViewHolder> {
 
-//public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-/*
 
-    private List<EventItem> eventItems;
+    private List<Event> eventItems;
     private Context context;
 
 
 
-    public MyAdapter(List<EventItem> eventItems, Context context) {
+    public MyAdapter(List<Event> eventItems, Context context) {
         this.eventItems = eventItems;
         this.context = context;
     }
     public interface OnItemClickListener {
-        void onItemClick(EventItem item);
+        void onItemClick(Event item);
     }
-    private  OnItemClickListener listener;
+    private com.example.kliq.eventattendancemobile.util.MyAdapter.OnItemClickListener listener;
 
-    public MyAdapter(List<EventItem> items, OnItemClickListener listener) {
+    public MyAdapter(List<Event> items, com.example.kliq.eventattendancemobile.util.MyAdapter.OnItemClickListener listener) {
         this.eventItems = items;
         this.listener = listener;
     }
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public com.example.kliq.eventattendancemobile.util.MyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item, parent, false);
-        return new ViewHolder(v);
+        return new com.example.kliq.eventattendancemobile.util.MyAdapter.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull com.example.kliq.eventattendancemobile.util.MyAdapter.ViewHolder holder, int position) {
 
-        EventItem eventItem = eventItems.get(position);
+        Event eventItem = eventItems.get(position);
         holder.textViewHead.setText(eventItem.getHead());
 //        holder.textViewDesc.setText(eventItem.getDesc());
         holder.bind(eventItems.get(position), listener);
@@ -73,7 +70,7 @@ import java.util.List;
             textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
         }
 
-        public void bind(final EventItem item, final OnItemClickListener listener) {
+        public void bind(final Event item, final com.example.kliq.eventattendancemobile.util.MyAdapter.OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);
@@ -81,5 +78,5 @@ import java.util.List;
                 }
             });
         }
-    }*/
-//}
+    }
+}

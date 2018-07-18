@@ -1,11 +1,7 @@
-package com.example.kliq.eventattendancemobile.login;
+package com.example.kliq.eventattendancemobile.data.model;
 
-/**
- * Created by ajmal on 7/11/18.
- */
-
-//public class LoggedInUser {
-   /* private int userId;
+public class User {
+    private int userId;
 
     private String fName;
 
@@ -13,7 +9,7 @@ package com.example.kliq.eventattendancemobile.login;
 
     private String AuthTok;
 
-    public LoggedInUser(int userId, String fName, String lName, String authTok) {
+    public User(int userId, String fName, String lName, String authTok) {
         this.userId = userId;
         this.fName = fName;
         this.lName = lName;
@@ -51,5 +47,5 @@ package com.example.kliq.eventattendancemobile.login;
 
     public void setAuthTok(String authTok) {
         AuthTok = authTok;
-    }*/
-//}
+    }
+}

@@ -1,13 +1,10 @@
-package com.example.kliq.eventattendancemobile.register;
-/*
-import android.app.ProgressDialog;
+package com.example.kliq.eventattendancemobile.data.service;
+
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,19 +16,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.kliq.eventattendancemobile.R;*/
-//import com.example.kliq.eventattendancemobile.login.LoginActivity;
-
+import com.example.kliq.eventattendancemobile.R;
+import com.example.kliq.eventattendancemobile.data.service.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+public class RegisterActivity extends AppCompatActivity {
 
-//public class RegisterActivity extends AppCompatActivity {
-
-    /*private static final String REGISTER_URL = "http://192.168.8.104:9000/user"; //URl to register user route
+    private static final String REGISTER_URL = "http://192.168.8.104:9000/user"; //URl to register user route
 
     //JSON object variables for the JSON body of Registering User
     public static final String kEY_FNAME = "fName";
@@ -66,7 +60,7 @@ import org.json.JSONObject;
         loginHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.RegisterActivity.this, com.example.kliq.eventattendancemobile.data.service.LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -107,18 +101,18 @@ import org.json.JSONObject;
     }
 
 
-    *//**
+    /**
      * Register User JSON Request
      * @throws JSONException
-     *//*
-     private void registerUser() throws JSONException {
-         // catching the values inside textViews
+     */
+    private void registerUser() throws JSONException {
+        // catching the values inside textViews
         final String firstName = fName.getText().toString().trim();
         final String lastName = lName.getText().toString().trim();
         final String email = eMail.getText().toString().trim();
         final String pass = password.getText().toString().trim();
 
-         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
 
         if(!firstName.equals("") && !lastName.equals("") && !email.equals("") && !pass.equals("") ){
@@ -138,7 +132,7 @@ import org.json.JSONObject;
                     public void onResponse(JSONObject response) {
 
                         Log.v("onresponse",response.toString());
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.RegisterActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                         onPause();
@@ -151,7 +145,7 @@ import org.json.JSONObject;
                     }
                 });
 
-                RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
+                RequestQueue queue = Volley.newRequestQueue(com.example.kliq.eventattendancemobile.data.service.RegisterActivity.this);
                 queue.add(registerUserRequest);
 
             }
@@ -165,14 +159,5 @@ import org.json.JSONObject;
             Toast.makeText(getApplicationContext(), "Fill All Fields", Toast.LENGTH_SHORT).show();
         }
 
-
-
-
-
-
-
-
-    }*/
-
-//}
-
+    }
+}

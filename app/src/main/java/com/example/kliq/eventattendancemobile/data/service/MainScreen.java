@@ -1,22 +1,21 @@
-package com.example.kliq.eventattendancemobile.qr;
-/*
+package com.example.kliq.eventattendancemobile.data.service;
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -28,8 +27,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
-//import com.example.kliq.eventattendancemobile.login.LoginActivity;
-import com.example.kliq.eventattendancemobile.register.RegisterActivity;
+import com.example.kliq.eventattendancemobile.data.service.LoginActivity;
+import com.example.kliq.eventattendancemobile.data.model.Event;
+import com.example.kliq.eventattendancemobile.util.MyAdapter;
+import com.example.kliq.eventattendancemobile.data.service.Scan;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,15 +39,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;*/
+import java.util.Map;
 
-//public class MainScreen extends AppCompatActivity {
+public class MainScreen extends AppCompatActivity {
 
-/*
 
     public static final int REQUEST_CODE = 100;
     public static final int PERMISSION_REQUEST = 100;
-    private List<EventItem> eventItems;
+    private List<Event> eventItems;
     private RecyclerView.Adapter adapter;
     private RecyclerView recyclerView;
     SharedPreferences menaPref;
@@ -69,8 +69,8 @@ import java.util.Map;*/
     private static final String KEY_AUTH_TOKEN = "authToken"; // Auth Token
 
     //Declare a private  RequestQueue variable
-    private  RequestQueue requestQueue;
-    private static MainScreen mInstance;
+    private RequestQueue requestQueue;
+    private static com.example.kliq.eventattendancemobile.data.service.MainScreen mInstance;
     static boolean doubleBackToExitPressedOnce = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,7 @@ import java.util.Map;*/
         URL_LOGOUT ="http://192.168.8.104:9000/user/log"; // Intialisng the Loggin OUt URL with the current users Auth Token
 
 
-        mInstance=MainScreen.this;
+        mInstance= com.example.kliq.eventattendancemobile.data.service.MainScreen.this;
         // Validating Camera Permission for the Visio API
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -126,18 +126,16 @@ import java.util.Map;*/
 
 
 
-    public static synchronized MainScreen getInstance()
+    public static synchronized com.example.kliq.eventattendancemobile.data.service.MainScreen getInstance()
     {
         return mInstance;
     }
-    */
-/*
+    /*
 Create a getRequestQueue() method to return the instance of
 RequestQueue.This kind of implementation ensures that
 the variable is instatiated only once and the same
 instance is used throughout the application
- *//*
-
+ */
     public RequestQueue getRequestQueue()
     {
         if (requestQueue==null)
@@ -145,27 +143,23 @@ instance is used throughout the application
 
         return requestQueue;
     }
-    */
-/*
+    /*
          public method to add the Request to the the single
     instance of RequestQueue created above.Setting a tag to every
     request helps in grouping them. Tags act as identifier
     for requests and can be used while cancelling them
-    *//*
-
-    public void addToRequestQueue(Request request,String tag)
+    */
+    public void addToRequestQueue(Request request, String tag)
     {
         request.setTag(tag);
         getRequestQueue().add(request);
 
     }
-    */
-/**
+    /**
      *
      * @param menu
      * @return
-     *//*
-
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -173,13 +167,11 @@ instance is used throughout the application
         return true;
     }
 
-    */
-/**
+    /**
      * Method to directing to logout user method in Activity Bar
      * @param item
      * @return
-     *//*
-
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -187,8 +179,8 @@ instance is used throughout the application
                 Toast.makeText(this,"Logged Out",Toast.LENGTH_SHORT).show();
                 logout();
 
-               // menaPref = getApplicationContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-               // menaPref.edit().remove("authToken").commit();
+                // menaPref = getApplicationContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                // menaPref.edit().remove("authToken").commit();
 
                 SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit();
                 editor.clear();
@@ -196,7 +188,7 @@ instance is used throughout the application
 
 
 
-                Intent intent = new Intent(MainScreen.this, LoginActivity.class);
+                Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.MainScreen.this, com.example.kliq.eventattendancemobile.data.service.LoginActivity.class);
                 startActivity(intent);
                 finish();
                 return true;
@@ -205,11 +197,9 @@ instance is used throughout the application
         return super.onOptionsItemSelected(item);
     }
 
-    */
-/**
+    /**
      * Load Event method
-     *//*
-
+     */
     private void loadEvents() {
 
         // Progress Dialog
@@ -233,7 +223,7 @@ instance is used throughout the application
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject o = array.getJSONObject(i); //initialising the JSON object using another JSON object
                                 // Initialising the EventItem class Object with event name and description and ID
-                                EventItem event = new EventItem(
+                                Event event = new Event(
                                         o.getString("eventName"),
                                         o.getString("eventDesc"),
                                         o.getString("eventId")
@@ -247,8 +237,8 @@ instance is used throughout the application
                             // Set Onclik to the adapter
                             adapter = new MyAdapter(eventItems, new MyAdapter.OnItemClickListener() {
                                 @Override
-                                public void onItemClick(EventItem item) {
-                                    Intent intent = new Intent(MainScreen.this, Scan.class); // creating an intent to the Scan Page
+                                public void onItemClick(Event item) {
+                                    Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.MainScreen.this, Scan.class); // creating an intent to the Scan Page
                                     intent.putExtra("eventIds",item.getId()); // passing the eventId to next Intent
                                     startActivity(intent); //start the Intent
                                 }
@@ -266,41 +256,37 @@ instance is used throughout the application
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
 
-                       // Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                        Toast.makeText(MainScreen.this, "UNAUTHORIZED", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(MainScreen.this, LoginActivity.class);
+                        // Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(com.example.kliq.eventattendancemobile.data.service.MainScreen.this, "UNAUTHORIZED", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.MainScreen.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
 
                     }
                 })
-            {
-                */
-/**
-                 * Passing some request headers*
-                 *//*
-
-                @Override
-                public Map getHeaders() throws AuthFailureError {
+        {
+            /**
+             * Passing some request headers*
+             */
+            @Override
+            public Map getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
                 headers.put("X-AUTH-TOKEN", authTok);
                 return headers;
             }
-            };
+        };
         //Initialising the request Que
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
 
-    */
-/**
+    /**
      * Logout method to Remove the current User
-     *//*
-
+     */
     private void logout() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loggin Out...");
-      //  progressDialog.show();
+        //  progressDialog.show();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.DELETE,
                 URL_LOGOUT, null,
@@ -318,11 +304,9 @@ instance is used throughout the application
 
         {
 
-            */
-/**
+            /**
              * Passing some request headers*
-             *//*
-
+             */
             @Override
             public Map getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
@@ -330,10 +314,9 @@ instance is used throughout the application
                 return headers;
             }
         };
-        MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
+        com.example.kliq.eventattendancemobile.data.service.MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
     }
 
-*/
 
 
     /*private void authVal(){
@@ -372,4 +355,4 @@ instance is used throughout the application
 // Adding the request to the queue along with a unique string tag
         MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
     }*/
-//}
+}

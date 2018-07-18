@@ -17,17 +17,17 @@
         android:name="com.google.android.gms.vision.DEPENDENCIES"
         android:value="barcode" />
 
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".data.service.LoginActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-        <activity android:name=".qr.MainScreen">
+        <activity android:name=".data.service.MainScreen">
     </activity>
-        <activity android:name=".register.RegisterActivity"></activity>
-        <activity android:name=".qr.Scan" />
-        <activity android:name=".qr.ResultScreen"></activity>
+        <activity android:name=".data.service.RegisterActivity"></activity>
+        <activity android:name=".data.service.Scan" />
+        <activity android:name=".data.service.ResultScreen"></activity>
     </application>
 
 </manifest>
