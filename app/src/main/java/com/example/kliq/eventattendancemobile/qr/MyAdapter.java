@@ -1,4 +1,4 @@
-package com.example.kliq.eventattendancemobile;
+package com.example.kliq.eventattendancemobile.qr;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.kliq.eventattendancemobile.R;
+
 import java.util.List;
 
 /**
@@ -16,14 +18,25 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
+
     private List<EventItem> eventItems;
     private Context context;
+
+
 
     public MyAdapter(List<EventItem> eventItems, Context context) {
         this.eventItems = eventItems;
         this.context = context;
     }
+    public interface OnItemClickListener {
+        void onItemClick(EventItem item);
+    }
+    private  OnItemClickListener listener;
 
+    public MyAdapter(List<EventItem> items, OnItemClickListener listener) {
+        this.eventItems = items;
+        this.listener = listener;
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -37,7 +50,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         EventItem eventItem = eventItems.get(position);
         holder.textViewHead.setText(eventItem.getHead());
-        holder.textViewDesc.setText(eventItem.getDesc());
+//        holder.textViewDesc.setText(eventItem.getDesc());
+        holder.bind(eventItems.get(position), listener);
 
     }
 
@@ -57,6 +71,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
             textViewHead = (TextView) itemView.findViewById(R.id.textViewHead);
             textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
+        }
+
+        public void bind(final EventItem item, final OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(item);
+
+                }
+            });
         }
     }
 }

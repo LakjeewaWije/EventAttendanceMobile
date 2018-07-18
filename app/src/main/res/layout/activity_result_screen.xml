@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".qr.ResultScreen">
+
+    <TextView
+        android:layout_width="102dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/eventname"
+        android:text="Event Name" />
+
+    <TextView
+        android:id="@+id/eventname"
+        android:layout_width="227dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/eventid"
+        android:layout_marginTop="206dp" />
+
+    <TextView
+        android:layout_width="102dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/eventid"
+        android:text="Event ID" />
+
+    <TextView
+        android:id="@+id/eventid"
+        android:layout_width="231dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="217dp"
+        android:layout_marginEnd="14dp" />
+
+    <TextView
+        android:id="@+id/barcodestring"
+        android:layout_width="279dp"
+        android:layout_height="107dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="71dp"
+        android:textSize="10sp" />
+
+    <ImageView
+        android:id="@+id/successtatus"
+        android:layout_width="286dp"
+        android:layout_height="169dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp" />
+
+    <Button
+        android:id="@+id/goback"
+        android:text="Back"
+        android:textColor="#ffffff"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="normal|bold"
+        android:background="#c53226"
+        android:textSize="20dp"
+        android:layout_width="98dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="33dp" />
+
+
+</RelativeLayout>
