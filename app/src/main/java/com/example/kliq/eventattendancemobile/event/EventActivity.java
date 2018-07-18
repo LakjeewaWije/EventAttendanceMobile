@@ -1,4 +1,4 @@
-package com.example.kliq.eventattendancemobile.data.service;
+package com.example.kliq.eventattendancemobile.event;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -27,10 +27,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
-import com.example.kliq.eventattendancemobile.data.service.LoginActivity;
 import com.example.kliq.eventattendancemobile.data.model.Event;
-import com.example.kliq.eventattendancemobile.util.MyAdapter;
-import com.example.kliq.eventattendancemobile.data.service.Scan;
+import com.example.kliq.eventattendancemobile.scanner.Scan;
+import com.example.kliq.eventattendancemobile.user.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,7 +69,7 @@ public class MainScreen extends AppCompatActivity {
 
     //Declare a private  RequestQueue variable
     private RequestQueue requestQueue;
-    private static com.example.kliq.eventattendancemobile.data.service.MainScreen mInstance;
+    private static MainScreen mInstance;
     static boolean doubleBackToExitPressedOnce = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +96,7 @@ public class MainScreen extends AppCompatActivity {
         URL_LOGOUT ="http://192.168.8.104:9000/user/log"; // Intialisng the Loggin OUt URL with the current users Auth Token
 
 
-        mInstance= com.example.kliq.eventattendancemobile.data.service.MainScreen.this;
+        mInstance= MainScreen.this;
         // Validating Camera Permission for the Visio API
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -126,7 +125,7 @@ public class MainScreen extends AppCompatActivity {
 
 
 
-    public static synchronized com.example.kliq.eventattendancemobile.data.service.MainScreen getInstance()
+    public static synchronized MainScreen getInstance()
     {
         return mInstance;
     }
@@ -188,7 +187,7 @@ instance is used throughout the application
 
 
 
-                Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.MainScreen.this, com.example.kliq.eventattendancemobile.data.service.LoginActivity.class);
+                Intent intent = new Intent(MainScreen.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
                 return true;
@@ -233,12 +232,12 @@ instance is used throughout the application
                             }
 
                             //Initialising the Adapter
-                            adapter = new MyAdapter(eventItems, getApplicationContext());
+                            adapter = new EventAdapter(eventItems, getApplicationContext());
                             // Set Onclik to the adapter
-                            adapter = new MyAdapter(eventItems, new MyAdapter.OnItemClickListener() {
+                            adapter = new EventAdapter(eventItems, new EventAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(Event item) {
-                                    Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.MainScreen.this, Scan.class); // creating an intent to the Scan Page
+                                    Intent intent = new Intent(MainScreen.this, Scan.class); // creating an intent to the Scan Page
                                     intent.putExtra("eventIds",item.getId()); // passing the eventId to next Intent
                                     startActivity(intent); //start the Intent
                                 }
@@ -257,8 +256,8 @@ instance is used throughout the application
                         progressDialog.dismiss();
 
                         // Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                        Toast.makeText(com.example.kliq.eventattendancemobile.data.service.MainScreen.this, "UNAUTHORIZED", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.MainScreen.this, LoginActivity.class);
+                        Toast.makeText(MainScreen.this, "UNAUTHORIZED", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainScreen.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
 
@@ -314,7 +313,7 @@ instance is used throughout the application
                 return headers;
             }
         };
-        com.example.kliq.eventattendancemobile.data.service.MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
+        MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
     }
 
 

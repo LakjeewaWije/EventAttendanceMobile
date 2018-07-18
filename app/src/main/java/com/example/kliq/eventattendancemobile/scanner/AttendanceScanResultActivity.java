@@ -17,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
-import com.example.kliq.eventattendancemobile.data.service.MainScreen;
+import com.example.kliq.eventattendancemobile.event.MainScreen;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import org.json.JSONException;
@@ -99,7 +99,7 @@ public class ResultScreen extends AppCompatActivity {
         goback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(com.example.kliq.eventattendancemobile.data.service.ResultScreen.this, com.example.kliq.eventattendancemobile.data.service.MainScreen.class);
+                Intent intent1 = new Intent(com.example.kliq.eventattendancemobile.data.service.ResultScreen.this, MainScreen.class);
                 startActivity(intent1);
                 finish();
             }

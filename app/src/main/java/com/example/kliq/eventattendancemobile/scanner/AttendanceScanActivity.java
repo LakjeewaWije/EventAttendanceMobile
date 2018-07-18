@@ -1,13 +1,12 @@
-package com.example.kliq.eventattendancemobile.qr;
+package com.example.kliq.eventattendancemobile.scanner;
 
-/*
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Icon;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,16 +14,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.kliq.eventattendancemobile.R;
+import com.example.kliq.eventattendancemobile.data.service.ResultScreen;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
-*/
 
-//public class Scan extends AppCompatActivity {
-   /* SurfaceView cameraView;
+public class Scan extends AppCompatActivity {
+    SurfaceView cameraView;
     BarcodeDetector barcode;
     CameraSource cameraSource;
     SurfaceHolder holder;
@@ -58,7 +57,7 @@ import java.io.IOException;
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 try{
-                    if (ContextCompat.checkSelfPermission(Scan.this,Manifest.permission.CAMERA)== PackageManager.PERMISSION_GRANTED){
+                    if (ContextCompat.checkSelfPermission(Scan.this, Manifest.permission.CAMERA)== PackageManager.PERMISSION_GRANTED){
                         cameraSource.start(cameraView.getHolder());
                     }
                 }catch (IOException e){
@@ -73,7 +72,7 @@ import java.io.IOException;
 
             @Override
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-               cameraSource.stop();
+                cameraSource.stop();
 
             }
         });
@@ -97,5 +96,5 @@ import java.io.IOException;
                 }
             }
         });
-    }*/
-//}
+    }
+}
