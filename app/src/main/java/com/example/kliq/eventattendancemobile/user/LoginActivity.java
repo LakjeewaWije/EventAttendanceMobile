@@ -1,4 +1,4 @@
-package com.example.kliq.eventattendancemobile.data.service;
+package com.example.kliq.eventattendancemobile.user;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,8 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
 import com.example.kliq.eventattendancemobile.data.model.User;
-import com.example.kliq.eventattendancemobile.data.service.MainScreen;
-import com.example.kliq.eventattendancemobile.data.service.RegisterActivity;
+import com.example.kliq.eventattendancemobile.event.EventActivity;
 import com.facebook.stetho.Stetho;
 
 import org.json.JSONException;
@@ -77,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         registerHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.LoginActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -102,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         String auth = menaPref.getString(KEY_AUTH_TOKEN,"");
 
         if(!auth.isEmpty()){
-            Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.LoginActivity.this, MainScreen.class);
+            Intent intent = new Intent(LoginActivity.this, EventActivity.class);
             startActivity(intent);
             finish();
         }
@@ -168,7 +167,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(KEY_AUTH_TOKEN, authToken);
                     editor.apply();
 
-                    Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.LoginActivity.this, MainScreen.class);
+                    Intent intent = new Intent(LoginActivity.this, EventActivity.class);
                     startActivity(intent);
                     finish();
 
@@ -182,10 +181,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.v("onErrorResponse", error.getLocalizedMessage());
-                Toast.makeText(com.example.kliq.eventattendancemobile.data.service.LoginActivity.this, "UnAuthorized", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "UnAuthorized", Toast.LENGTH_SHORT).show();
             }
         });
-        RequestQueue queue = Volley.newRequestQueue(com.example.kliq.eventattendancemobile.data.service.LoginActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
         queue.add(registerUserRequest);
     }
 }

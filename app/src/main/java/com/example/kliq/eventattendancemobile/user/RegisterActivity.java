@@ -1,4 +1,4 @@
-package com.example.kliq.eventattendancemobile.data.service;
+package com.example.kliq.eventattendancemobile.user;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
-import com.example.kliq.eventattendancemobile.data.service.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         loginHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.RegisterActivity.this, com.example.kliq.eventattendancemobile.data.service.LoginActivity.class);
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -132,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
 
                         Log.v("onresponse",response.toString());
-                        Intent intent = new Intent(com.example.kliq.eventattendancemobile.data.service.RegisterActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                         onPause();
@@ -145,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
 
-                RequestQueue queue = Volley.newRequestQueue(com.example.kliq.eventattendancemobile.data.service.RegisterActivity.this);
+                RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
                 queue.add(registerUserRequest);
 
             }

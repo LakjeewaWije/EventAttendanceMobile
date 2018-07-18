@@ -1,4 +1,4 @@
-package com.example.kliq.eventattendancemobile.data.service;
+package com.example.kliq.eventattendancemobile.scanner;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,13 +17,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
-import com.example.kliq.eventattendancemobile.event.MainScreen;
+import com.example.kliq.eventattendancemobile.event.EventActivity;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ResultScreen extends AppCompatActivity {
+public class AttendanceScanResultActivity extends AppCompatActivity {
     TextView eventID; //eventname Text view
     TextView eventName; //eventid Text View
     TextView barcodestring; // barcode Text View
@@ -99,7 +99,7 @@ public class ResultScreen extends AppCompatActivity {
         goback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(com.example.kliq.eventattendancemobile.data.service.ResultScreen.this, MainScreen.class);
+                Intent intent1 = new Intent(AttendanceScanResultActivity.this, EventActivity.class);
                 startActivity(intent1);
                 finish();
             }
@@ -108,7 +108,7 @@ public class ResultScreen extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        Intent intent2 = new Intent(com.example.kliq.eventattendancemobile.data.service.ResultScreen.this,MainScreen.class);
+        Intent intent2 = new Intent(AttendanceScanResultActivity.this,EventActivity.class);
         startActivity(intent2);
         finish();
     }

@@ -28,7 +28,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
 import com.example.kliq.eventattendancemobile.data.model.Event;
-import com.example.kliq.eventattendancemobile.scanner.Scan;
+import com.example.kliq.eventattendancemobile.scanner.AttendanceScanActivity;
 import com.example.kliq.eventattendancemobile.user.LoginActivity;
 
 import org.json.JSONArray;
@@ -40,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainScreen extends AppCompatActivity {
+public class EventActivity extends AppCompatActivity {
 
 
     public static final int REQUEST_CODE = 100;
@@ -69,7 +69,7 @@ public class MainScreen extends AppCompatActivity {
 
     //Declare a private  RequestQueue variable
     private RequestQueue requestQueue;
-    private static MainScreen mInstance;
+    private static EventActivity mInstance;
     static boolean doubleBackToExitPressedOnce = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class MainScreen extends AppCompatActivity {
         URL_LOGOUT ="http://192.168.8.104:9000/user/log"; // Intialisng the Loggin OUt URL with the current users Auth Token
 
 
-        mInstance= MainScreen.this;
+        mInstance= EventActivity.this;
         // Validating Camera Permission for the Visio API
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -125,7 +125,7 @@ public class MainScreen extends AppCompatActivity {
 
 
 
-    public static synchronized MainScreen getInstance()
+    public static synchronized EventActivity getInstance()
     {
         return mInstance;
     }
@@ -187,7 +187,7 @@ instance is used throughout the application
 
 
 
-                Intent intent = new Intent(MainScreen.this, LoginActivity.class);
+                Intent intent = new Intent(EventActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
                 return true;
@@ -237,7 +237,7 @@ instance is used throughout the application
                             adapter = new EventAdapter(eventItems, new EventAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(Event item) {
-                                    Intent intent = new Intent(MainScreen.this, Scan.class); // creating an intent to the Scan Page
+                                    Intent intent = new Intent(EventActivity.this, AttendanceScanActivity.class); // creating an intent to the AttendanceScanActivity Page
                                     intent.putExtra("eventIds",item.getId()); // passing the eventId to next Intent
                                     startActivity(intent); //start the Intent
                                 }
@@ -256,8 +256,8 @@ instance is used throughout the application
                         progressDialog.dismiss();
 
                         // Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                        Toast.makeText(MainScreen.this, "UNAUTHORIZED", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(MainScreen.this, LoginActivity.class);
+                        Toast.makeText(EventActivity.this, "UNAUTHORIZED", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(EventActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
 
@@ -313,7 +313,7 @@ instance is used throughout the application
                 return headers;
             }
         };
-        MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
+        EventActivity.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
     }
 
 
@@ -334,7 +334,7 @@ instance is used throughout the application
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Intent intent = new Intent(MainScreen.this, LoginActivity.class);
+                        Intent intent = new Intent(EventActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
 
@@ -352,6 +352,6 @@ instance is used throughout the application
             }
         };
 // Adding the request to the queue along with a unique string tag
-        MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
+        EventActivity.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
     }*/
 }

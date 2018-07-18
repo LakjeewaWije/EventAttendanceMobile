@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.kliq.eventattendancemobile.R;
-import com.example.kliq.eventattendancemobile.data.service.ResultScreen;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -22,7 +21,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
-public class Scan extends AppCompatActivity {
+public class AttendanceScanActivity extends AppCompatActivity {
     SurfaceView cameraView;
     BarcodeDetector barcode;
     CameraSource cameraSource;
@@ -57,7 +56,7 @@ public class Scan extends AppCompatActivity {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 try{
-                    if (ContextCompat.checkSelfPermission(Scan.this, Manifest.permission.CAMERA)== PackageManager.PERMISSION_GRANTED){
+                    if (ContextCompat.checkSelfPermission(AttendanceScanActivity.this, Manifest.permission.CAMERA)== PackageManager.PERMISSION_GRANTED){
                         cameraSource.start(cameraView.getHolder());
                     }
                 }catch (IOException e){
@@ -87,7 +86,7 @@ public class Scan extends AppCompatActivity {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size()>0){
                     Intent intent1 = getIntent();
-                    Intent intent = new Intent(Scan.this, ResultScreen.class);
+                    Intent intent = new Intent(AttendanceScanActivity.this, AttendanceScanResultActivity.class);
                     intent.putExtra("barcode",barcodes.valueAt(0));
                     intent.putExtra("eventId",intent1.getStringExtra("eventIds"));
                     intent.putExtra("eventName",intent1.getStringExtra("eventNames"));
