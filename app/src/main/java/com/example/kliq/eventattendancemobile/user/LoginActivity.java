@@ -2,6 +2,7 @@ package com.example.kliq.eventattendancemobile.user;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.example.kliq.eventattendancemobile.data.model.User;
 import com.example.kliq.eventattendancemobile.data.service.UserService;
 import com.example.kliq.eventattendancemobile.event.EventActivity;
 import com.example.kliq.eventattendancemobile.user.RequestHandler.LoginOnResponse;
+import com.example.kliq.eventattendancemobile.util.SharedPrefManager;
 import com.facebook.stetho.Stetho;
 
 import org.json.JSONException;
@@ -37,13 +39,18 @@ public class LoginActivity extends AppCompatActivity implements LoginOnResponse 
     private TextView registerHere;
     private Button loginButton;
 
+    private TextView textval;
+
     // Reference for LoggedInUser class Object
     public static User user;
 
     //Declaring  Shared Preferences
     private String authTok;
-    SharedPreferences menaPref;
+    /*SharedPreferences menaPref;
     SharedPreferences.Editor editor;
+
+
+    */
     private static final String SHARED_PREF_NAME = "sharedPref";
 
     //Shared Preferences Variables
@@ -51,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements LoginOnResponse 
     private static final String KEY_AUTH_TOKEN = "authToken"; // Auth token for shared preference
     static boolean doubleBackToExitPressedOnce = false;
 
-
+    public SharedPrefManager sharedpref;
 
 
 
@@ -68,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements LoginOnResponse 
         password = (EditText) findViewById(R.id.password);
         loginButton = (Button) findViewById(R.id.loginButton);
         registerHere = (TextView) findViewById(R.id.messageTwo);
+        textval = (TextView) findViewById(R.id.textView);
 
 
         // Register link Onclick
@@ -95,14 +103,13 @@ public class LoginActivity extends AppCompatActivity implements LoginOnResponse 
         });
 
         // Initialising the Shred Preferences
-        menaPref = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String auth = menaPref.getString(KEY_AUTH_TOKEN,"");
+        /*sharedpref.retrieveTok();
 
-        if(!auth.isEmpty()){
+        if(sharedpref.retrieveTok().isEmpty()){
             Intent intent = new Intent(LoginActivity.this, EventActivity.class);
             startActivity(intent);
             finish();
-        }
+        }*/
 
     }
 
@@ -141,7 +148,6 @@ public class LoginActivity extends AppCompatActivity implements LoginOnResponse 
 //        application.getRequestQueue().add()
 
     }
-
     @Override
     public void onLoginSucess(JSONObject response) {
         try {
@@ -157,26 +163,38 @@ public class LoginActivity extends AppCompatActivity implements LoginOnResponse 
             String authToken = o.getString("authToken"); // current User Auth Token
 
             user = new User(fName, authToken); // current user initialised
-            // saving values in shared preferences
-            editor = menaPref.edit();
-            editor.putString(KEY_FNAME, user.getfName());
-            editor.putString(KEY_AUTH_TOKEN, authToken);
-            editor.apply();
+            // saving values in shared preferences0
 
+
+            sharedpref.getmInstance(getApplicationContext());
+
+            boolean loginSuccess = sharedpref.userLogin(fName,authToken);//save string in shared preference.
+
+
+            /*editor = menaPref.edit();
+            editor.putString(KEY_FNAME, user.getfName());
+            editor.putString(KEY_AUTH_TOKEN, user.getAuthTok());
+            editor.apply();*/
+        if(loginSuccess==true) {
             Intent intent = new Intent(LoginActivity.this, EventActivity.class);
             startActivity(intent);
             finish();
+        }
         } catch (JSONException e) {
             e.printStackTrace();
+        }  catch (Resources.NotFoundException e){
+            e.printStackTrace();
+        }   catch (NullPointerException e){
+            e.getMessage();
         }
     }
 
     @Override
     public void onLoginError(VolleyError error) {
 
-        Log.v("onErrorResponse", error.getLocalizedMessage());
-        Toast.makeText(LoginActivity.this, "UnAuthorized", Toast.LENGTH_SHORT).show();
-
+//        Log.v("onErrorResponse", error.getLocalizedMessage());
+        textval.setText("Invalid Credentials");
+        Toast.makeText(LoginActivity.this, "Please Check The Credentials Before Entering", Toast.LENGTH_SHORT).show();
 
     }
 }

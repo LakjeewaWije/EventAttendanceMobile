@@ -1,6 +1,7 @@
 package com.example.kliq.eventattendancemobile.data.service;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,11 +31,6 @@ public class UserService {
     private String URL_LOGOUT = "";
 
 
-
-
-
-
-
     public void loginUser(JSONObject jsonobj, final LoginOnResponse loginOnResponse) throws JSONException {
 
         JsonObjectRequest loginUserRequest = new JsonObjectRequest(Request.Method.POST, LOGIN_URL, jsonobj, new Response.Listener<JSONObject>() {
@@ -45,6 +41,7 @@ public class UserService {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
                 loginOnResponse.onLoginError(error);
             }
         });

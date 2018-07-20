@@ -1,6 +1,7 @@
 package com.example.kliq.eventattendancemobile.user;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterOnRes
     private EditText eMail;
     private EditText password;
     private TextView loginHere;
+    private TextView textVal;
     //XML Button
     private Button registerButton;
     static boolean doubleBackToExitPressedOnce = false;
@@ -51,6 +53,8 @@ public class RegisterActivity extends AppCompatActivity implements RegisterOnRes
         password = (EditText) findViewById(R.id.password);
         registerButton = (Button) findViewById(R.id.registerButton);
         loginHere = (TextView) findViewById(R.id.messageTwo);
+        textVal = (TextView) findViewById(R.id.textView2);
+
 
         // login link set Onclick
         loginHere.setOnClickListener(new View.OnClickListener() {
@@ -143,11 +147,30 @@ public class RegisterActivity extends AppCompatActivity implements RegisterOnRes
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
-        onPause();
+
     }
 
     @Override
     public void onRegisterError(VolleyError error) {
-        Log.v("onErrorResponse",error.getLocalizedMessage());
+        if(fName.equals("")) {
+            fName.setBackgroundColor(Color.parseColor("#FA9292"));
+            textVal.setText("FirstName is Required");
+
+        }
+        if(lName.equals("")) {
+            lName.setBackgroundColor(Color.parseColor("#FA9292"));
+            textVal.setText("LastName is Required");
+        }
+        if(eMail.equals("")) {
+            eMail.setBackgroundColor(Color.parseColor("#FA9292"));
+            textVal.setText("Email is Required");
+        }
+        if(password.equals("")) {
+            password.setBackgroundColor(Color.parseColor("#FA9292"));
+            textVal.setText("Password is Required");
+        }
+        fName.setBackgroundColor(Color.parseColor("#FA9292"));
+        textVal.setText("Email Already in User");
+        Toast.makeText(getApplicationContext(), "Please Fill Above fields", Toast.LENGTH_SHORT).show();
     }
 }
