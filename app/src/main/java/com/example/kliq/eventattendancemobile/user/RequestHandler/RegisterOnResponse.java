@@ -4,8 +4,8 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
-public interface LogoutOnResponse {
-    void onLogoutSucess(JSONObject response);
+public interface RegisterOnResponse {
+    void onRegisterSucess(JSONObject response);
 
-    void onLogoutError(VolleyError error);
+    void onRegisterError(VolleyError error);
 }

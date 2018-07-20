@@ -8,7 +8,7 @@ import com.android.volley.toolbox.Volley;
 
 public class RequestHandler {
     private static com.example.kliq.eventattendancemobile.util.RequestHandler mInstance;
-    private RequestQueue mRequestQueue;
+    private static RequestQueue mRequestQueue;
     private static Context mCtx;
 
     private RequestHandler(Context context) {
@@ -24,7 +24,7 @@ public class RequestHandler {
         return mInstance;
     }
 
-    public RequestQueue getRequestQueue() {
+    public static RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.

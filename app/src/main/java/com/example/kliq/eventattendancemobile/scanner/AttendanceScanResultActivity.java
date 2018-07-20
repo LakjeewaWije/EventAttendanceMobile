@@ -17,13 +17,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
+import com.example.kliq.eventattendancemobile.data.service.EventService;
 import com.example.kliq.eventattendancemobile.event.EventActivity;
+import com.example.kliq.eventattendancemobile.scanner.RequestHandler.AttendUserOnResponse;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AttendanceScanResultActivity extends AppCompatActivity {
+public class AttendanceScanResultActivity extends AppCompatActivity implements AttendUserOnResponse{
     TextView eventID; //eventname Text view
     TextView eventName; //eventid Text View
     TextView barcodestring; // barcode Text View
@@ -114,36 +116,26 @@ public class AttendanceScanResultActivity extends AppCompatActivity {
     }
 
     public void attendUser(){
-        RequestQueue queue = Volley.newRequestQueue(this);
+        EventService eventService = new EventService();
         if (eventidb.equals(eventIdi)){
             try {
-                JsonObjectRequest registerUserRequest = new JsonObjectRequest(Request.Method.POST, URL_DATA,registerUserRequestBody , new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Toast.makeText(getApplicationContext(),"U got Registered",Toast.LENGTH_SHORT).show();
-//                        statusimg.setImageResource(R.drawable.tick);
-//                        finish();
-//                    Log.v("onresponse",response.toString());
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-//                        statusimg.setImageResource(R.drawable.cross);
-                        Toast.makeText(getApplicationContext(),"Error on Response",Toast.LENGTH_SHORT).show();
-//                    Log.v("onErrorResponse",error.getLocalizedMessage());
-                    }
-                });
-                queue.add(registerUserRequest);
+            eventService.attendUser(this,registerUserRequestBody);
             }catch (Exception e){
                 Toast.makeText(getApplicationContext(),"Error on catch",Toast.LENGTH_SHORT).show();
             }
-
-
         }else {
             Toast.makeText(getApplicationContext(),"Events Don't Match",Toast.LENGTH_SHORT).show();
             statusimg.setImageResource(R.drawable.unrelatedqr);
         }
+    }
 
+    @Override
+    public void onAttendUserSuccess(JSONObject response) {
+        Toast.makeText(getApplicationContext(),"Successfully Registered ",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAttendUserError(VolleyError error) {
+        Toast.makeText(getApplicationContext(),"Couldn't Register",Toast.LENGTH_SHORT).show();
     }
 }

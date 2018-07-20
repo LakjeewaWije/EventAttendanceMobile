@@ -11,18 +11,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
+import com.example.kliq.eventattendancemobile.data.service.UserService;
+import com.example.kliq.eventattendancemobile.user.RequestHandler.RegisterOnResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements RegisterOnResponse {
 
     private static final String REGISTER_URL = "http://192.168.8.104:9000/user"; //URl to register user route
 
@@ -100,11 +97,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Register User JSON Request
-     * @throws JSONException
-     */
+
     private void registerUser() throws JSONException {
+
+
         // catching the values inside textViews
         final String firstName = fName.getText().toString().trim();
         final String lastName = lName.getText().toString().trim();
@@ -126,27 +122,8 @@ public class RegisterActivity extends AppCompatActivity {
                 registerUserRequestBody.put(kEY_PASS,pass);
                 // JSON Request
 
-                JsonObjectRequest registerUserRequest = new JsonObjectRequest(Request.Method.POST, REGISTER_URL, registerUserRequestBody, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        Log.v("onresponse",response.toString());
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                        onPause();
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.v("onErrorResponse",error.getLocalizedMessage());
-                    }
-                });
-
-                RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
-                queue.add(registerUserRequest);
-
+                UserService userService = new UserService();
+                userService.registerUser(registerUserRequestBody,this);
             }
             else
             {
@@ -158,5 +135,19 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Fill All Fields", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public void onRegisterSucess(JSONObject response) {
+        Log.v("onresponse",response.toString());
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+        onPause();
+    }
+
+    @Override
+    public void onRegisterError(VolleyError error) {
+        Log.v("onErrorResponse",error.getLocalizedMessage());
     }
 }

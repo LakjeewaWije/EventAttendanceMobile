@@ -13,34 +13,33 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kliq.eventattendancemobile.R;
 import com.example.kliq.eventattendancemobile.data.model.Event;
+import com.example.kliq.eventattendancemobile.data.service.EventService;
+import com.example.kliq.eventattendancemobile.data.service.UserService;
+import com.example.kliq.eventattendancemobile.event.RequestHandler.LoadEventsOnResponse;
 import com.example.kliq.eventattendancemobile.scanner.AttendanceScanActivity;
 import com.example.kliq.eventattendancemobile.user.LoginActivity;
+import com.example.kliq.eventattendancemobile.user.RequestHandler.LogoutOnResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends AppCompatActivity implements LogoutOnResponse,LoadEventsOnResponse{
 
 
     public static final int REQUEST_CODE = 100;
@@ -84,7 +83,11 @@ public class EventActivity extends AppCompatActivity {
         eventItems = new ArrayList<>();
 
         // Calling Load Event Method in order to load events
-        loadEvents();
+        try {
+            loadEvents();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // Getting shred preferences for refered variable from the referenced key
         menaPref = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -123,37 +126,6 @@ public class EventActivity extends AppCompatActivity {
         }, 2000);
     }
 
-
-
-    public static synchronized EventActivity getInstance()
-    {
-        return mInstance;
-    }
-    /*
-Create a getRequestQueue() method to return the instance of
-RequestQueue.This kind of implementation ensures that
-the variable is instatiated only once and the same
-instance is used throughout the application
- */
-    public RequestQueue getRequestQueue()
-    {
-        if (requestQueue==null)
-            requestQueue= Volley.newRequestQueue(getApplicationContext());
-
-        return requestQueue;
-    }
-    /*
-         public method to add the Request to the the single
-    instance of RequestQueue created above.Setting a tag to every
-    request helps in grouping them. Tags act as identifier
-    for requests and can be used while cancelling them
-    */
-    public void addToRequestQueue(Request request, String tag)
-    {
-        request.setTag(tag);
-        getRequestQueue().add(request);
-
-    }
     /**
      *
      * @param menu
@@ -176,16 +148,14 @@ instance is used throughout the application
         switch (item.getItemId()){
             case R.id.logout:
                 Toast.makeText(this,"Logged Out",Toast.LENGTH_SHORT).show();
-                logout();
-
-                // menaPref = getApplicationContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-                // menaPref.edit().remove("authToken").commit();
-
+                try {
+                    logout();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit();
                 editor.clear();
                 editor.commit();
-
-
 
                 Intent intent = new Intent(EventActivity.this, LoginActivity.class);
                 startActivity(intent);
@@ -196,162 +166,83 @@ instance is used throughout the application
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Load Event method
-     */
-    private void loadEvents() {
 
+    public void loadEvents() throws JSONException {
         // Progress Dialog
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading Events..");
         progressDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_DATA,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        try {
-                            // creating a JSON object to wrap the response
+        EventService eventService = new EventService();
+        eventService.loadEvents(this);
+        progressDialog.dismiss();
 
-                            JSONObject jsonObject = new JSONObject(s);
-
-                            // adding the oject to ajson array
-                            JSONArray array = jsonObject.getJSONArray("data");
-
-
-                            for (int i = 0; i < array.length(); i++) {
-                                JSONObject o = array.getJSONObject(i); //initialising the JSON object using another JSON object
-                                // Initialising the EventItem class Object with event name and description and ID
-                                Event event = new Event(
-                                        o.getString("eventName"),
-                                        o.getString("eventDesc"),
-                                        o.getString("eventId")
-                                );
-
-                                eventItems.add(event);
-                            }
-
-                            //Initialising the Adapter
-                            adapter = new EventAdapter(eventItems, getApplicationContext());
-                            // Set Onclik to the adapter
-                            adapter = new EventAdapter(eventItems, new EventAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(Event item) {
-                                    Intent intent = new Intent(EventActivity.this, AttendanceScanActivity.class); // creating an intent to the AttendanceScanActivity Page
-                                    intent.putExtra("eventIds",item.getId()); // passing the eventId to next Intent
-                                    startActivity(intent); //start the Intent
-                                }
-                            });
-                            recyclerView.setAdapter(adapter); //set the Adapter to the Recycler View
-                            progressDialog.dismiss(); // Dismiss the progress Dialog
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progressDialog.dismiss();
-
-                        // Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                        Toast.makeText(EventActivity.this, "UNAUTHORIZED", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(EventActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-
-                    }
-                })
-        {
-            /**
-             * Passing some request headers*
-             */
-            @Override
-            public Map getHeaders() throws AuthFailureError {
-                HashMap headers = new HashMap();
-                headers.put("X-AUTH-TOKEN", authTok);
-                return headers;
-            }
-        };
-        //Initialising the request Que
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
     }
-
-    /**
-     * Logout method to Remove the current User
-     */
-    private void logout() {
+    private void logout() throws JSONException{
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loggin Out...");
         //  progressDialog.show();
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.DELETE,
-                URL_LOGOUT, null,
-                new Response.Listener() {
-                    @Override
-                    public void onResponse(Object response) {
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                })
-
-        {
-
-            /**
-             * Passing some request headers*
-             */
-            @Override
-            public Map getHeaders() throws AuthFailureError {
-                HashMap headers = new HashMap();
-                headers.put("X-AUTH-TOKEN", authTok);
-                return headers;
-            }
-        };
-        EventActivity.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
+        UserService userService = new UserService();
+        userService.logoutUser(this);
     }
 
+    @Override
+    public void onLogoutSucess(JSONObject response) {
+        Toast.makeText(EventActivity.this, "Loggin Out", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLogoutError(VolleyError error) {
+        Log.v("onErrorResponse", error.getLocalizedMessage());
+        Toast.makeText(EventActivity.this, "UnAuthorized", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLoadEventsSucess(String response) {
+        try {
+            // creating a JSON object to wrap the response
+            JSONObject jsonObject = new JSONObject(response);
+//            Toast.makeText(EventActivity.this, " Loaded Events", Toast.LENGTH_SHORT).show();
+            // adding the oject to ajson array
+            JSONArray array = jsonObject.getJSONArray("data");
 
 
-    /*private void authVal(){
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject o = array.getJSONObject(i); //initialising the JSON object using another JSON object
+                // Initialising the EventItem class Object with event name and description and ID
+                Event event = new Event(
+                        o.getString("eventName"),
+                        o.getString("eventDesc"),
+                        o.getString("eventId")
+                );
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
-                URL_LOGOUT, null,
-                new Response.Listener() {
-                    @Override
-                    public void onResponse(Object response) {
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Intent intent = new Intent(EventActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-
-                    }
-                })
-
-        {
-
-            /*//** Passing some request headers* *//**//*
-            @Override
-            public Map getHeaders() throws AuthFailureError {
-                HashMap headers = new HashMap();
-                headers.put("X-AUTH-TOKEN", authTok);
-                return headers;
+                eventItems.add(event);
             }
-        };
-// Adding the request to the queue along with a unique string tag
-        EventActivity.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
-    }*/
+
+            //Initialising the Adapter
+            adapter = new EventAdapter(eventItems, getApplicationContext());
+            // Set Onclik to the adapter
+            adapter = new EventAdapter(eventItems, new EventAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Event item) {
+                    Intent intent = new Intent(EventActivity.this, AttendanceScanActivity.class); // creating an intent to the AttendanceScanActivity Page
+                    intent.putExtra("eventIds",item.getId()); // passing the eventId to next Intent
+                    startActivity(intent); //start the Intent
+                }
+            });
+            recyclerView.setAdapter(adapter); //set the Adapter to the Recycler View
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onLoadEventsError(VolleyError error) {
+//         Toast.makeText(EventActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+        Toast.makeText(EventActivity.this, "Can't Load Events", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(EventActivity.this, LoginActivity.class);
+//        startActivity(intent);
+//        finish();
+    }
 }

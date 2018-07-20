@@ -1,4 +1,4 @@
-package com.example.kliq.eventattendancemobile.user;
+package com.example.kliq.eventattendancemobile.user.RequestHandler;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;

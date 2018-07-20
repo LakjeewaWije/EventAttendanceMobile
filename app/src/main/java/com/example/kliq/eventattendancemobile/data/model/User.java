@@ -1,29 +1,18 @@
 package com.example.kliq.eventattendancemobile.data.model;
 
 public class User {
-    private int userId;
 
     private String fName;
 
-    private String lName;
+
 
     private String AuthTok;
 
-    public User(int userId, String fName, String lName, String authTok) {
-        this.userId = userId;
+    public User( String fName, String authTok) {
         this.fName = fName;
-        this.lName = lName;
         AuthTok = authTok;
     }
 
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public String getfName() {
         return fName;
@@ -31,14 +20,6 @@ public class User {
 
     public void setfName(String fName) {
         this.fName = fName;
-    }
-
-    public String getlName() {
-        return lName;
-    }
-
-    public void setlName(String lName) {
-        this.lName = lName;
     }
 
     public String getAuthTok() {
