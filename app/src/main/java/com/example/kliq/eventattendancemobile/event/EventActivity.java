@@ -31,6 +31,7 @@ import com.example.kliq.eventattendancemobile.event.RequestHandler.LoadEventsOnR
 import com.example.kliq.eventattendancemobile.scanner.AttendanceScanActivity;
 import com.example.kliq.eventattendancemobile.user.LoginActivity;
 import com.example.kliq.eventattendancemobile.user.RequestHandler.LogoutOnResponse;
+import com.example.kliq.eventattendancemobile.util.SharedPrefManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,8 +48,7 @@ public class EventActivity extends AppCompatActivity implements LogoutOnResponse
     private List<Event> eventItems;
     private RecyclerView.Adapter adapter;
     private RecyclerView recyclerView;
-    SharedPreferences menaPref;
-    SharedPreferences.Editor editor;
+
 
     // Variables to values Stored in Shred Preferences
     private String name; // Current Users Name
@@ -66,6 +66,7 @@ public class EventActivity extends AppCompatActivity implements LogoutOnResponse
     private static final String KEY_FNAME = "fName"; // First Name
     private static final String KEY_AUTH_TOKEN = "authToken"; // Auth Token
 
+    SharedPrefManager sharedpref;
     //Declare a private  RequestQueue variable
     private RequestQueue requestQueue;
     private static EventActivity mInstance;
@@ -90,11 +91,19 @@ public class EventActivity extends AppCompatActivity implements LogoutOnResponse
         }
 
         // Getting shred preferences for refered variable from the referenced key
-        menaPref = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
+
+
+        sharedpref= SharedPrefManager.getmInstance(getApplicationContext());
+        String firstName =  sharedpref.retrieveFirstName();
+        getSupportActionBar().setTitle("Welcome "+ firstName);
+
+        /*menaPref = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
         editor = menaPref.edit();
-        name = menaPref.getString(KEY_FNAME, ""); // getting name
-        getSupportActionBar().setTitle("Welcome "+name); // setting the retrived name on the Acitivity Bar
-        authTok = menaPref.getString(KEY_AUTH_TOKEN,""); //retireving the Auth Token to logout the current user when needed
+        name = menaPref.getString(KEY_FNAME, "");*/ // getting name
+
+
+        /*getSupportActionBar().setTitle("Welcome "+name); // setting the retrived name on the Acitivity Bar
+        authTok = menaPref.getString(KEY_AUTH_TOKEN,"");*/ //retireving the Auth Token to logout the current user when needed
 
         URL_LOGOUT ="http://192.168.8.104:9000/user/log"; // Intialisng the Loggin OUt URL with the current users Auth Token
 
@@ -153,15 +162,11 @@ public class EventActivity extends AppCompatActivity implements LogoutOnResponse
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit();
-                editor.clear();
-                editor.commit();
+                /*sharedpref = SharedPrefManager.getmInstance(getApplicationContext());
 
-                Intent intent = new Intent(EventActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-                return true;
+                if(sharedpref.logout()) {
 
+                }*/
         }
         return super.onOptionsItemSelected(item);
     }
@@ -181,6 +186,10 @@ public class EventActivity extends AppCompatActivity implements LogoutOnResponse
     private void logout() throws JSONException{
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loggin Out...");
+        sharedpref = SharedPrefManager.getmInstance(getApplicationContext());
+        sharedpref.logout();
+
+
         //  progressDialog.show();
 
         UserService userService = new UserService();
@@ -189,6 +198,10 @@ public class EventActivity extends AppCompatActivity implements LogoutOnResponse
 
     @Override
     public void onLogoutSucess(JSONObject response) {
+
+        Intent intent = new Intent(EventActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
         Toast.makeText(EventActivity.this, "Loggin Out", Toast.LENGTH_SHORT).show();
     }
 

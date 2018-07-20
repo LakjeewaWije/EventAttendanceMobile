@@ -12,6 +12,7 @@ import com.example.kliq.eventattendancemobile.user.RequestHandler.LoginOnRespons
 import com.example.kliq.eventattendancemobile.user.RequestHandler.LogoutOnResponse;
 import com.example.kliq.eventattendancemobile.user.RequestHandler.RegisterOnResponse;
 import com.example.kliq.eventattendancemobile.util.RequestHandler;
+import com.example.kliq.eventattendancemobile.util.SharedPrefManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +25,11 @@ public class UserService {
     private static final String LOGIN_URL = "http://192.168.8.104:9000/user/login"; // URL for user Login route
 
     //Declaring  Shared Preferences
-    private String authTok;
+
+
+  //  SharedPrefManager sharedPref;
+   // public String authTok  = sharedPref.retrieveTokAsString();
+
 
     private static final String REGISTER_URL = "http://192.168.8.104:9000/user"; //URl to register user route
 
@@ -70,7 +75,6 @@ public class UserService {
 
 
     public void logoutUser(final LogoutOnResponse logoutOnResponse) {
-
         final JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.DELETE,
                 URL_LOGOUT, null,new Response.Listener<JSONObject>() {
             @Override
@@ -84,11 +88,10 @@ public class UserService {
             }
         })
         {
-
             @Override
             public Map getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
-                headers.put("X-AUTH-TOKEN", authTok);
+                //headers.put("X-AUTH-TOKEN", authTok);
                 return headers;
             }
         };

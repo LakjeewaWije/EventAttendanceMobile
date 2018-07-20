@@ -94,22 +94,20 @@ public class LoginActivity extends AppCompatActivity implements LoginOnResponse 
             public void onClick(View view) {
                 try {
                     loginUser();
-                    Log.v("gggggggggggg",authTok);
+//                    Log.v("gggggggggggg",authTok);
                 } catch (Exception e) {
-                    Log.v("loginButton.onClick", e.getLocalizedMessage());
+          //          Log.v("loginButton.onClick", e.getLocalizedMessage());
                     e.printStackTrace();
                 }
             }
         });
-
+        sharedpref = SharedPrefManager.getmInstance(getApplicationContext());
         // Initialising the Shred Preferences
-        /*sharedpref.retrieveTok();
-
-        if(sharedpref.retrieveTok().isEmpty()){
+        if(!sharedpref.retrieveTok()){
             Intent intent = new Intent(LoginActivity.this, EventActivity.class);
             startActivity(intent);
             finish();
-        }*/
+        }
 
     }
 
@@ -166,20 +164,14 @@ public class LoginActivity extends AppCompatActivity implements LoginOnResponse 
             // saving values in shared preferences0
 
 
-            sharedpref.getmInstance(getApplicationContext());
+            sharedpref = SharedPrefManager.getmInstance(getApplicationContext());
 
-            boolean loginSuccess = sharedpref.userLogin(fName,authToken);//save string in shared preference.
+            if(sharedpref.userLogin(fName,authToken)) {//save string in shared preference.
+                Intent intent = new Intent(LoginActivity.this, EventActivity.class);
+                startActivity(intent);
+                finish();
+            }
 
-
-            /*editor = menaPref.edit();
-            editor.putString(KEY_FNAME, user.getfName());
-            editor.putString(KEY_AUTH_TOKEN, user.getAuthTok());
-            editor.apply();*/
-        if(loginSuccess==true) {
-            Intent intent = new Intent(LoginActivity.this, EventActivity.class);
-            startActivity(intent);
-            finish();
-        }
         } catch (JSONException e) {
             e.printStackTrace();
         }  catch (Resources.NotFoundException e){

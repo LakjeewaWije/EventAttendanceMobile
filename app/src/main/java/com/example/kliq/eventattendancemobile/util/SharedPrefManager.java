@@ -54,9 +54,29 @@ public class SharedPrefManager {
         return true;
 
     }
-    public String retrieveTok(){
+    public Boolean retrieveTok(){
+        SharedPreferences sharedPreferences = mctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String auth = sharedPreferences.getString(KEY_AUTH_TOKEN,"");
+        if(auth.equals("") || auth ==null){
+            return true;
+        }
+        else{
+            return false;
+            }
+    }
+    public String retrieveTokAsString(){
         SharedPreferences sharedPreferences = mctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String auth = sharedPreferences.getString(KEY_AUTH_TOKEN,"");
         return auth;
+    }
+
+
+    public String retrieveFirstName(){
+        SharedPreferences sharedPreferences = mctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String firstName = sharedPreferences.getString(KEY_FNAME,"");
+        if(firstName!=null){
+            return firstName;
+        }
+        return null;
     }
 }
