@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.example.kliq.eventattendancemobile.R;
 import com.example.kliq.eventattendancemobile.data.service.EventService;
 import com.example.kliq.eventattendancemobile.event.EventActivity;
 import com.example.kliq.eventattendancemobile.scanner.RequestHandler.AttendUserOnResponse;
+import com.example.kliq.eventattendancemobile.util.SharedPrefManager;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import org.json.JSONException;
@@ -51,7 +53,10 @@ public class AttendanceScanResultActivity extends AppCompatActivity implements A
     private static final String KEY_AUTH_TOKEN = "authToken";
     //----------------------------------------------------------------------
     public static JSONObject jsonObject=null;
-    public static final String URL_DATA = "http://192.168.8.104:9000/ed";
+    public static final String URL_DATA = "http://192.168.8.101:9000/ed";
+
+    SharedPrefManager sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +67,16 @@ public class AttendanceScanResultActivity extends AppCompatActivity implements A
         statusimg = (ImageView) findViewById(R.id.successtatus);
         goback = (Button) findViewById(R.id.goback);
 
-        menaPref = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        /*menaPref = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
         editor = menaPref.edit();
-        authtoken = menaPref.getString(KEY_AUTH_TOKEN,"");
+        authtoken = menaPref.getString(KEY_AUTH_TOKEN,"");*/
+
+        sharedPref= SharedPrefManager.getmInstance(getApplicationContext());
+        String auth =  sharedPref.retrieveTokAsString();
+
+
+
+
         final Intent intent = getIntent();
         eventIdi= intent.getStringExtra("eventId");
         eventNamei=intent.getStringExtra("eventName");
@@ -82,15 +94,17 @@ public class AttendanceScanResultActivity extends AppCompatActivity implements A
             jsonObject = new JSONObject(barcodeToString);
             eventidb=jsonObject.getString("eventId");
             evntnameb=jsonObject.getString("eventName");
-            uuidb=jsonObject.getString("UUID");
+            uuidb=jsonObject.getString("uuid");
             browsertokenb=jsonObject.getString("browserToken");
 
 
             registerUserRequestBody.put("eventId",eventidb);
             registerUserRequestBody.put("eventName",evntnameb);
-            registerUserRequestBody.put("UUID",uuidb);
+            registerUserRequestBody.put("uuid",uuidb);
             registerUserRequestBody.put("browserToken",browsertokenb);
-            registerUserRequestBody.put("authToken",authtoken);
+            registerUserRequestBody.put("authToken",auth);
+
+            Log.v("sumudu",registerUserRequestBody.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -120,6 +134,7 @@ public class AttendanceScanResultActivity extends AppCompatActivity implements A
         if (eventidb.equals(eventIdi)){
             try {
             eventService.attendUser(this,registerUserRequestBody);
+            Log.v("ijijij",registerUserRequestBody.toString());
             }catch (Exception e){
                 Toast.makeText(getApplicationContext(),"Error on catch",Toast.LENGTH_SHORT).show();
             }

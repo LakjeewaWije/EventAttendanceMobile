@@ -27,10 +27,10 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements LoginOnResponse {
 
-    private static final String LOGIN_URL = "http://192.168.8.104:9000/user/login"; // URL for user Login route
+    private static final String LOGIN_URL = "http://192.168.8.101:9000/user/login"; // URL for user Login route
     public static final String kEY_EMAIL = "email";
     public static final String kEY_PASS = "password";
-    private static final String CHECKLOG_URL = "http://192.168.8.104:9000/user/check";
+    private static final String CHECKLOG_URL = "http://192.168.8.101:9000/user/check";
 
 
     // XML attributes

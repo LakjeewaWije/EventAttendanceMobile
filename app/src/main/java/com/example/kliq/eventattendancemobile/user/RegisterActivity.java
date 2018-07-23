@@ -22,7 +22,7 @@ import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity implements RegisterOnResponse {
 
-    private static final String REGISTER_URL = "http://192.168.8.104:9000/user"; //URl to register user route
+    private static final String REGISTER_URL = "http://192.168.8.101:9000/user"; //URl to register user route
 
     //JSON object variables for the JSON body of Registering User
     public static final String kEY_FNAME = "fName";

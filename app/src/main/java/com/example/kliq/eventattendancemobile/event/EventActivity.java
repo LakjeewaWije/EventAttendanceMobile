@@ -56,7 +56,7 @@ public class EventActivity extends AppCompatActivity implements LogoutOnResponse
 
 
 
-    public static final String URL_DATA = "http://192.168.8.104:9000/mob"; // URL for loading events route
+    public static final String URL_DATA = "http://192.168.8.101:9000/mob"; // URL for loading events route
     private  String URL_LOGOUT=""; // URL for log out User route
     // Declaring Shared Preferences
     private static final String SHARED_PREF_NAME = "sharedPref";
@@ -105,7 +105,7 @@ public class EventActivity extends AppCompatActivity implements LogoutOnResponse
         /*getSupportActionBar().setTitle("Welcome "+name); // setting the retrived name on the Acitivity Bar
         authTok = menaPref.getString(KEY_AUTH_TOKEN,"");*/ //retireving the Auth Token to logout the current user when needed
 
-        URL_LOGOUT ="http://192.168.8.104:9000/user/log"; // Intialisng the Loggin OUt URL with the current users Auth Token
+        URL_LOGOUT ="http://192.168.8.101:9000/user/log"; // Intialisng the Loggin OUt URL with the current users Auth Token
 
 
         mInstance= EventActivity.this;
@@ -186,23 +186,20 @@ public class EventActivity extends AppCompatActivity implements LogoutOnResponse
     private void logout() throws JSONException{
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loggin Out...");
-        sharedpref = SharedPrefManager.getmInstance(getApplicationContext());
-        sharedpref.logout();
-
-
         //  progressDialog.show();
-
         UserService userService = new UserService();
         userService.logoutUser(this);
     }
 
     @Override
     public void onLogoutSucess(JSONObject response) {
-
+        sharedpref = SharedPrefManager.getmInstance(getApplicationContext());
+        sharedpref.logout();
         Intent intent = new Intent(EventActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
         Toast.makeText(EventActivity.this, "Loggin Out", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

@@ -57,7 +57,8 @@ public class EventService {
     private static final String KEY_FNAME = "fName"; // First Name
     private static final String KEY_AUTH_TOKEN = "authToken"; // Auth Token
 
-    public static final String URL_DATA = "http://192.168.8.104:9000/mob";
+    public static final String URL_DATA = "http://192.168.8.101:9000/con";
+    public static final String URL_ATTEND = "http://192.168.8.101:9000/ed";
 
 
     public void loadEvents( final LoadEventsOnResponse loadEventsOnResponse) throws JSONException {
@@ -80,7 +81,7 @@ public class EventService {
     }
 
     public void attendUser(final AttendUserOnResponse attendUserOnResponse , JSONObject registerUserRequestBody) throws JSONException {
-        JsonObjectRequest attendUserrequest = new JsonObjectRequest(Request.Method.POST, URL_DATA,registerUserRequestBody , new Response.Listener<JSONObject>() {
+        JsonObjectRequest attendUserrequest = new JsonObjectRequest(Request.Method.POST, URL_ATTEND,registerUserRequestBody , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 attendUserOnResponse.onAttendUserSuccess(response);

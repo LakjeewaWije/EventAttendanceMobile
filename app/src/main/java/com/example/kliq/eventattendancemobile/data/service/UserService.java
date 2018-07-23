@@ -1,7 +1,9 @@
 package com.example.kliq.eventattendancemobile.data.service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,7 +24,9 @@ import java.util.Map;
 
 public class UserService {
 
-    private static final String LOGIN_URL = "http://192.168.8.104:9000/user/login"; // URL for user Login route
+    private static final String LOGIN_URL = "http://192.168.8.101:9000/user/login"; // URL for user Login route
+
+    SharedPrefManager sharedPref;
 
     //Declaring  Shared Preferences
 
@@ -31,9 +35,9 @@ public class UserService {
    // public String authTok  = sharedPref.retrieveTokAsString();
 
 
-    private static final String REGISTER_URL = "http://192.168.8.104:9000/user"; //URl to register user route
+    private static final String REGISTER_URL = "http://192.168.8.101:9000/user"; //URl to register user route
 
-    private String URL_LOGOUT = "";
+    private String URL_LOGOUT = "http://192.168.8.101:9000/user/log";
 
 
     public void loginUser(JSONObject jsonobj, final LoginOnResponse loginOnResponse) throws JSONException {
@@ -75,7 +79,7 @@ public class UserService {
 
 
     public void logoutUser(final LogoutOnResponse logoutOnResponse) {
-        final JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.DELETE,
+         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.DELETE,
                 URL_LOGOUT, null,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -91,11 +95,16 @@ public class UserService {
             @Override
             public Map getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
-                //headers.put("X-AUTH-TOKEN", authTok);
+
+                sharedPref = SharedPrefManager.getmInstance((Context)logoutOnResponse);
+                String auth = sharedPref.retrieveTokAsString();
+                Log.v("TOKEN",auth);
+                headers.put("X-AUTH-TOKEN", auth);
                 return headers;
             }
         };
-
+         RequestHandler.getInstance((Context) logoutOnResponse).addToRequestQueue(jsonObjReq);
+        //MainScreen.getInstance().addToRequestQueue(jsonObjReq,"headerRequest");
     }
 
 
